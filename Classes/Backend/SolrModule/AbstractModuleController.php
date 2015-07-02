@@ -130,7 +130,6 @@ abstract class AbstractModuleController extends ActionController implements Admi
 			}
 		} catch (NoSuchArgumentException $nsae) {
 			$sites = \Tx_Solr_Site::getAvailableSites();
-
 			$site = array_shift($sites);
 			$this->site = $site;
 		}
@@ -138,6 +137,7 @@ abstract class AbstractModuleController extends ActionController implements Admi
 		$this->request->setArgument('site', $this->site);
 
 		$moduleData = $this->moduleDataStorageService->loadModuleData();
+//@todo validation wenn Site nicht exestiert fehlermeldung mit anweisung was gemacht werden muss
 		$moduleData->setSite($this->site);
 		$this->moduleDataStorageService->persistModuleData($moduleData);
 	}

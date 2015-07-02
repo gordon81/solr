@@ -31,7 +31,7 @@
  * @package	TYPO3
  * @subpackage	solr
  */
-class Tx_Solr_Report_SolrConfigStatus implements tx_reports_StatusProvider {
+class Tx_Solr_Report_SolrConfigStatus implements TYPO3\CMS\Reports\StatusProviderInterface {
 
 	/**
 	 * The config name property is constructed as follows:
@@ -51,11 +51,11 @@ class Tx_Solr_Report_SolrConfigStatus implements tx_reports_StatusProvider {
 	 * Solr server. Only adds an entry if a solrconfig other than the
 	 * recommended one was found.
 	 *
-	 * @see typo3/sysext/reports/interfaces/tx_reports_StatusProvider::getStatus()
+	 * @see typo3/sysext/reports/interfaces/\TYPO3\CMS\Reports\StatusProviderInterface::getStatus()
 	 */
 	public function getStatus() {
 		$reports = array();
-		$solrConnections = t3lib_div::makeInstance('Tx_Solr_ConnectionManager')->getAllConnections();
+		$solrConnections = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_ConnectionManager')->getAllConnections();
 
 		foreach ($solrConnections as $solrConnection) {
 
@@ -96,11 +96,11 @@ class Tx_Solr_Report_SolrConfigStatus implements tx_reports_StatusProvider {
 					. '<li>Path: ' . $solrConnection->getPath() . '</li>
 					</ul>';
 
-				$status = t3lib_div::makeInstance('tx_reports_reports_status_Status',
+				$status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Reports\\Status',
 					'Solrconfig Version',
 					'Unsupported solrconfig.xml',
 					$message,
-					tx_reports_reports_status_Status::WARNING
+					\TYPO3\CMS\Reports\Status::WARNING
 				);
 
 				$reports[] = $status;

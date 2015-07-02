@@ -24,6 +24,7 @@ namespace ApacheSolrForTypo3\Solr\Backend\SolrModule;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
@@ -57,8 +58,12 @@ class IndexFieldsModuleController extends AbstractModuleController {
 	 */
 	public function indexAction() {
 		$solrConnection = $this->getSelectedCoreSolrConnection();
+		/** @var Apache_Solr_Response $lukeData */
 		$lukeData       = $solrConnection->getLukeMetaData();
-
+		if($lukeData->getHttpStatus() !== 200 ){
+			$this->addFlashMessage('ausgabe wert '. $lukeData->getHttpStatus(),'HTTP Status undefiniert',\TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+			return '';
+		}
 		$registry = GeneralUtility::makeInstance('TYPO3\CMS\Core\Registry');
 		$limit    = $registry->get('tx_solr', 'luke.limit', 20000);
 

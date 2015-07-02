@@ -31,12 +31,12 @@
  * @package TYPO3
  * @subpackage solr
  */
-class Tx_Solr_Report_FilterVarStatus implements tx_reports_StatusProvider {
+class Tx_Solr_Report_FilterVarStatus implements TYPO3\CMS\Reports\StatusProviderInterface {
 
 	/**
 	 * Checks whether allow_url_fopen is enabled.
 	 *
-	 * @see typo3/sysext/reports/interfaces/tx_reports_StatusProvider::getStatus()
+	 * @see typo3/sysext/reports/interfaces/\TYPO3\CMS\Reports\StatusProviderInterface::getStatus()
 	 */
 	public function getStatus() {
 		$reports  = array();
@@ -52,11 +52,11 @@ class Tx_Solr_Report_FilterVarStatus implements tx_reports_StatusProvider {
 				More information is available at
 				<a href="https://bugs.php.net/bug.php?id=51192">php.net</a>.';
 
-			$reports[] = t3lib_div::makeInstance('tx_reports_reports_status_Status',
+			$reports[] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Reports\\Status',
 				'PHP filter_var() bug',
 				'Affected PHP version detected.',
 				$message,
-				tx_reports_reports_status_Status::ERROR
+				\TYPO3\CMS\Reports\Status::ERROR
 			);
 		}
 

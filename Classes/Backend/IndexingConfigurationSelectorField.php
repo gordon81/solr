@@ -30,7 +30,7 @@
  * @package TYPO3
  * @subpackage solr
  */
-class Tx_Solr_Backend_IndexingConfigurationSelectorField {
+class Tx_Solr_Backend_IndexingConfigurationSelectorField extends \TYPO3\CMS\Backend\Form\Element\SelectCheckBoxElement{
 
 	/**
 	 * Site used to determine indexing configurations
@@ -107,7 +107,9 @@ class Tx_Solr_Backend_IndexingConfigurationSelectorField {
 	 *  @return string Markup for the select field
 	 */
 	public function render() {
-		$tceForm = t3lib_div::makeInstance('t3lib_TCEforms');
+
+		$tceForm = $this;
+			//\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Form\\Element\\SelectCheckBoxElement');
 
 			// transform selected values into the format used by TCEforms
 		$selectedValues = array();

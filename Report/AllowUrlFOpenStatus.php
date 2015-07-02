@@ -31,21 +31,21 @@
  * @package TYPO3
  * @subpackage solr
  */
-class Tx_Solr_Report_AllowUrlFOpenStatus implements tx_reports_StatusProvider {
+class Tx_Solr_Report_AllowUrlFOpenStatus implements TYPO3\CMS\Reports\StatusProviderInterface {
 
 	/**
 	 * Checks whether allow_url_fopen is enabled.
 	 *
-	 * @see typo3/sysext/reports/interfaces/tx_reports_StatusProvider::getStatus()
+	 * @see typo3/sysext/reports/interfaces/\TYPO3\CMS\Reports\StatusProviderInterface::getStatus()
 	 */
 	public function getStatus() {
 		$reports  = array();
-		$severity = tx_reports_reports_status_Status::OK;
+		$severity = \TYPO3\CMS\Reports\Status::OK;
 		$value    = 'On';
 		$message  = '';
 
 		if (!ini_get('allow_url_fopen')) {
-			$severity = tx_reports_reports_status_Status::ERROR;
+			$severity = \TYPO3\CMS\Reports\Status::ERROR;
 			$value    = 'Off';
 			$message  = 'allow_url_fopen must be enabled in php.ini to allow
 				communication between TYPO3 and the Apache Solr server.
@@ -53,7 +53,7 @@ class Tx_Solr_Report_AllowUrlFOpenStatus implements tx_reports_StatusProvider {
 				this setting disabled.';
 		}
 
-		$reports[] = t3lib_div::makeInstance('tx_reports_reports_status_Status',
+		$reports[] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Reports\\Status',
 			'allow_url_fopen',
 			$value,
 			$message,

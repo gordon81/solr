@@ -31,7 +31,7 @@
  * @package	TYPO3
  * @subpackage	solr
  */
-class Tx_Solr_Report_AccessFilterPluginInstalledStatus implements tx_reports_StatusProvider {
+class Tx_Solr_Report_AccessFilterPluginInstalledStatus implements TYPO3\CMS\Reports\StatusProviderInterface {
 
 	/**
 	 * Solr Access Filter plugin version.
@@ -55,11 +55,11 @@ class Tx_Solr_Report_AccessFilterPluginInstalledStatus implements tx_reports_Sta
 	 * Solr server. Only adds an entry if the Access Filter Query Parser Plugin
 	 * is not configured.
 	 *
-	 * @see typo3/sysext/reports/interfaces/tx_reports_StatusProvider::getStatus()
+	 * @see typo3/sysext/reports/interfaces/\TYPO3\CMS\Reports\StatusProviderInterface::getStatus()
 	 */
 	public function getStatus() {
 		$reports = array();
-		$solrConnections = t3lib_div::makeInstance('Tx_Solr_ConnectionManager')->getAllConnections();
+		$solrConnections = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_ConnectionManager')->getAllConnections();
 
 		foreach ($solrConnections as $solrConnection) {
 			if ($solrConnection->ping()) {
@@ -100,11 +100,11 @@ class Tx_Solr_Report_AccessFilterPluginInstalledStatus implements tx_reports_Sta
 
 			$message .= $this->getPluginDownloadMessage();
 
-			$status = t3lib_div::makeInstance('tx_reports_reports_status_Status',
+			$status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Reports\\Status',
 				'Access Filter Plugin',
 				'Not Installed',
 				$message,
-				tx_reports_reports_status_Status::WARNING
+				\TYPO3\CMS\Reports\Status::WARNING
 			);
 		}
 
@@ -134,11 +134,11 @@ class Tx_Solr_Report_AccessFilterPluginInstalledStatus implements tx_reports_Sta
 
 			$message .= $this->getPluginDownloadMessage();
 
-			$status = t3lib_div::makeInstance('tx_reports_reports_status_Status',
+			$status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Reports\\Status',
 				'Access Filter Plugin',
 				'Outdated',
 				$message,
-				tx_reports_reports_status_Status::WARNING
+				\TYPO3\CMS\Reports\Status::WARNING
 			);
 		}
 

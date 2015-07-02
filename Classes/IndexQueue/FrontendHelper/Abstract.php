@@ -56,7 +56,7 @@ abstract class Tx_Solr_IndexQueue_FrontendHelper_Abstract implements Tx_Solr_Ind
 	 * Disables the frontend output for index queue requests.
 	 *
 	 * @param	array	Parameters from frontend
-	 * @param	tslib_fe	TSFE object
+	 * @param	\TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController 	TSFE object
 	 */
 	public function disableFrontendOutput(&$parameters, $parentObject) {
 		$parameters['enableOutput'] = FALSE;
@@ -66,7 +66,7 @@ abstract class Tx_Solr_IndexQueue_FrontendHelper_Abstract implements Tx_Solr_Ind
 	 * Disables caching for page generation to get reliable results.
 	 *
 	 * @param	array	Parameters from frontend
-	 * @param	tslib_fe	TSFE object
+	 * @param	\TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController 	TSFE object
 	 */
 	public function disableCaching(&$parameters, $parentObject) {
 		$parentObject->no_cache = TRUE;
@@ -83,7 +83,7 @@ abstract class Tx_Solr_IndexQueue_FrontendHelper_Abstract implements Tx_Solr_Ind
 		$this->response = $response;
 
 		if ($request->getParameter('loggingEnabled')) {
-			t3lib_div::devLog('Page indexer request received', 'solr', 0, array(
+			\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('Page indexer request received', 'solr', 0, array(
 				'request' => (array) $request,
 			));
 		}

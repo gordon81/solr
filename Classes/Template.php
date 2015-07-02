@@ -151,11 +151,11 @@ class Tx_Solr_Template {
 				// could be FALSE if not matching view helper class was found
 			if ($viewHelperClassName) {
 				try {
-					$helperInstance = t3lib_div::makeInstance($viewHelperClassName, $arguments);
+					$helperInstance = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($viewHelperClassName, $arguments);
 					$success = $this->addViewHelperObject($helperName, $helperInstance);
 				} catch(Exception $e) {
 					if ($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_solr.']['logging.']['exceptions']) {
-						t3lib_div::devLog('exception while adding a viewhelper', 'solr', 3, array(
+						\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('exception while adding a viewhelper', 'solr', 3, array(
 							$e->__toString()
 						));
 					}
@@ -173,19 +173,19 @@ class Tx_Solr_Template {
 
 		foreach ($this->viewHelperIncludePath as $extensionKey => $viewHelperPath) {
 			$viewHelperRealPath = $viewHelperPath;
-			if (t3lib_div::isFirstPartOfStr($viewHelperPath, 'Classes/')) {
+			if (\TYPO3\CMS\Core\Utility\GeneralUtility::isFirstPartOfStr($viewHelperPath, 'Classes/')) {
 				$viewHelperRealPath = substr($viewHelperPath, 8);
 			}
 			if (substr($viewHelperRealPath, -1) == '/') {
 				$viewHelperRealPath = substr($viewHelperRealPath, 0, -1);
 			}
 
-			$classNamePrefix = t3lib_extMgm::getCN($extensionKey);
+			$classNamePrefix = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getCN($extensionKey);
 
 			$possibleFilename  = Tx_Solr_Util::underscoredToUpperCamelCase($helperKey) . '.php';
 			$possibleClassName = $classNamePrefix . '_' . str_replace('/', '_', $viewHelperRealPath) . '_' . Tx_Solr_Util::underscoredToUpperCamelCase($helperKey);
 
-			$viewHelperIncludePath = t3lib_extMgm::extPath($extensionKey)
+			$viewHelperIncludePath = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($extensionKey)
 				. $viewHelperPath . $possibleFilename;
 
 			if (file_exists($viewHelperIncludePath)) {
@@ -243,7 +243,7 @@ class Tx_Solr_Template {
 			if (count($variableMarkers)) {
 				$resolvedMarkers = $this->resolveVariableMarkers($variableMarkers, $variable);
 
-				$this->workOnSubpart = t3lib_parsehtml::substituteMarkerArray(
+				$this->workOnSubpart = \TYPO3\CMS\Core\Html\HtmlParser::substituteMarkerArray(
 					$this->workOnSubpart,
 					$resolvedMarkers,
 					'###|###'
@@ -252,14 +252,14 @@ class Tx_Solr_Template {
 		}
 
 			// process markers
-		$this->workOnSubpart = t3lib_parsehtml::substituteMarkerArray(
+		$this->workOnSubpart = \TYPO3\CMS\Core\Html\HtmlParser::substituteMarkerArray(
 			$this->workOnSubpart,
 			$this->markers
 		);
 
 			// process subparts
 		foreach ($this->subparts as $subpart => $content) {
-			$this->workOnSubpart = t3lib_parsehtml::substituteSubpart(
+			$this->workOnSubpart = \TYPO3\CMS\Core\Html\HtmlParser::substituteSubpart(
 				$this->workOnSubpart,
 				$subpart,
 				$content
@@ -332,7 +332,7 @@ class Tx_Solr_Template {
 		$unresolvedConditions = $this->findConditions($this->workOnSubpart);
 		foreach ($unresolvedConditions as $unresolvedCondition) {
 				// if condition evaluates to FALSE, remove the content from the template
-			$this->workOnSubpart = t3lib_parsehtml::substituteSubpart(
+			$this->workOnSubpart = \TYPO3\CMS\Core\Html\HtmlParser::substituteSubpart(
 				$this->workOnSubpart,
 				$unresolvedCondition['marker'],
 				''
@@ -396,7 +396,7 @@ class Tx_Solr_Template {
 
 			$viewHelperContent = $viewHelper->execute($viewHelperArguments);
 
-			$content = t3lib_parsehtml::substituteMarker(
+			$content = \TYPO3\CMS\Core\Html\HtmlParser::substituteMarker(
 				$content,
 				'###' . $helperKey . ':' . $viewHelperArgumentList . '###',
 				$viewHelperContent
@@ -420,7 +420,7 @@ class Tx_Solr_Template {
 		foreach ($viewHelperArgumentLists as $viewHelperArgumentList) {
 			$subpartMarker = '###' . $helperKey . ':' . $viewHelperArgumentList . '###';
 
-			$subpart = t3lib_parsehtml::getSubpart(
+			$subpart = \TYPO3\CMS\Core\Html\HtmlParser::getSubpart(
 				$content,
 				$subpartMarker
 			);
@@ -435,7 +435,7 @@ class Tx_Solr_Template {
 				$viewHelperContent = $viewHelper->execute($viewHelperArguments);
 			} catch (UnexpectedValueException $e) {
 				if ($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_solr.']['logging.']['exceptions']) {
-					t3lib_div::devLog('Exception while rendering a viewhelper', 'solr', 3, array(
+					\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('Exception while rendering a viewhelper', 'solr', 3, array(
 						$e->__toString()
 					));
 				}
@@ -443,7 +443,7 @@ class Tx_Solr_Template {
 				$viewHelperContent = '';
 			}
 
-			$content = t3lib_parsehtml::substituteSubpart(
+			$content = \TYPO3\CMS\Core\Html\HtmlParser::substituteSubpart(
 				$content,
 				$subpartMarker,
 				$viewHelperContent,
@@ -493,7 +493,7 @@ class Tx_Solr_Template {
 					// pass the whole object / array / variable as is (serialized though)
 				$resolvedMarkers[$loopMarker] = serialize($value);
 
-				$currentIterationContent = t3lib_parsehtml::substituteMarkerArray(
+				$currentIterationContent = \TYPO3\CMS\Core\Html\HtmlParser::substituteMarkerArray(
 					$loopSingleItem,
 					$resolvedMarkers,
 					'###|###'
@@ -520,19 +520,19 @@ class Tx_Solr_Template {
 			}
 		}
 
-		$loopContent = t3lib_parsehtml::substituteSubpart(
+		$loopContent = \TYPO3\CMS\Core\Html\HtmlParser::substituteSubpart(
 			$loopTemplate,
 			'###' . strtoupper($loopContentMarker) . '###',
 			$loopContent
 		);
 
-		$loopContent = t3lib_parsehtml::substituteMarkerArray(
+		$loopContent = \TYPO3\CMS\Core\Html\HtmlParser::substituteMarkerArray(
 			$loopContent,
 			array('LOOP_ELEMENT_COUNT' => $loopCount),
 			'###|###'
 		);
 
-		$this->workOnSubpart = t3lib_parsehtml::substituteSubpart(
+		$this->workOnSubpart = \TYPO3\CMS\Core\Html\HtmlParser::substituteSubpart(
 			$this->workOnSubpart,
 			'###LOOP:' . strtoupper($loopName) . '###',
 			$loopContent
@@ -631,14 +631,14 @@ class Tx_Solr_Template {
 			if ($conditionResult) {
 					// if condition evaluates to TRUE, simply replace it with
 					// the original content to have the surrounding markers removed
-				$content = t3lib_parsehtml::substituteSubpart(
+				$content = \TYPO3\CMS\Core\Html\HtmlParser::substituteSubpart(
 					$content,
 					$condition['marker'],
 					$condition['content']
 				);
 			} else {
 					// if condition evaluates to FALSE, remove the content from the template
-				$content = t3lib_parsehtml::substituteSubpart(
+				$content = \TYPO3\CMS\Core\Html\HtmlParser::substituteSubpart(
 					$content,
 					$condition['marker'],
 					''
@@ -675,7 +675,7 @@ class Tx_Solr_Template {
 		foreach ($ifMarkers as $ifMarker) {
 			list($comparand1, $operator, $comparand2) = explode('|', $ifMarker);
 
-			$ifContent = t3lib_parsehtml::getSubpart(
+			$ifContent = \TYPO3\CMS\Core\Html\HtmlParser::getSubpart(
 				$content,
 				'###IF:' . $ifMarker . '###'
 			);
@@ -853,7 +853,7 @@ class Tx_Solr_Template {
 			$template = $alternativeTemplate;
 		}
 
-		$subpart = t3lib_parsehtml::getSubpart(
+		$subpart = \TYPO3\CMS\Core\Html\HtmlParser::getSubpart(
 			$template,
 			'###' . strtoupper($subpartName) . '###'
 		);

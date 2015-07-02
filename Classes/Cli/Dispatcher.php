@@ -30,7 +30,7 @@
  * @package TYPO3
  * @subpackage solr
  */
-class Tx_Solr_Cli_Dispatcher extends t3lib_cli {
+class Tx_Solr_Cli_Dispatcher extends \TYPO3\CMS\Core\Controller\CommandLineController {
 
 	/**
 	 * Constructor.
@@ -38,8 +38,8 @@ class Tx_Solr_Cli_Dispatcher extends t3lib_cli {
 	 * Initializes the help parameters.
 	 *
 	 */
-	public function __construct() {
-		parent::t3lib_cli();
+	public function __cownstruct() {
+		parent::__construct();
 
 			// Setting help texts:
 		$this->cli_help['name']        = 'solr -- Solr commands for TYPO3 installations';
@@ -58,7 +58,7 @@ class Tx_Solr_Cli_Dispatcher extends t3lib_cli {
 
 		switch ($command) {
 			case 'updateConnections':
-				$connectionManager = t3lib_div::makeInstance('Tx_Solr_ConnectionManager');
+				$connectionManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Solr_ConnectionManager');
 				$connectionManager->updateConnections();
 				break;
 
